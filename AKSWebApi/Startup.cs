@@ -42,7 +42,8 @@ namespace AKSWebApi
         {
             services.AddAntiforgery(options => options.SuppressXFrameOptionsHeader = true);
             services.AddHealthChecks()
-               .AddCheck("self", () => HealthCheckResult.Healthy());
+                .AddLivenessHealthCheck("Liveness", HealthStatus.Unhealthy, new List<string>() { "Liveness" })
+                .AddReadinessHealthCheck("Readiness", HealthStatus.Unhealthy, new List<string> { "Readiness" });
             ConfigureSwagger(services);
             services.AddApiVersioning(o =>
             {
@@ -124,7 +125,16 @@ namespace AKSWebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                ConfigureHealthCheck(app);
+
+                endpoints.MapHealthChecks("/aks-api/healthz", new HealthCheckOptions()
+                {
+                    Predicate = check => check.Name == "Liveness"
+                });
+
+                endpoints.MapHealthChecks("/aks-api/ready", new HealthCheckOptions()
+                {
+                    Predicate = check => check.Name == "Readiness"
+                });
             });
             ConfigureSecurity(app);
         }
@@ -158,19 +168,6 @@ namespace AKSWebApi
                         .UpgradeInsecureRequests()
                         .WorkerSources(w => w.None())
                         .ScriptSources(s => s.None()));
-        }
-
-
-        private void ConfigureHealthCheck(IApplicationBuilder app)
-        {
-            app.UseHealthChecks("/aks-api/self", new HealthCheckOptions
-            {
-                Predicate = r => r.Name.Contains("self")
-            });
-            app.UseHealthChecks(path: "/aks-api/hc", new HealthCheckOptions()
-            {
-                Predicate = _ => true
-            });
         }
 
     }
@@ -247,5 +244,60 @@ namespace AKSWebApi
 
         // Required to satisfy interface
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    }
+
+    public static class HealthCheckBuilderExtensions
+    {
+        public static IHealthChecksBuilder AddLivenessHealthCheck(
+            this IHealthChecksBuilder builder,
+            string name,
+            HealthStatus? failureStatus,
+            IEnumerable<string> tags)
+        {
+            return builder.AddCheck<LivenessHealthCheck>(
+                name,
+                failureStatus,
+                tags);
+        }
+
+        public static IHealthChecksBuilder AddReadinessHealthCheck(
+            this IHealthChecksBuilder builder,
+            string name,
+            HealthStatus? failureStatus,
+            IEnumerable<string> tags)
+        {
+            return builder.AddCheck<ReadinessHealthCheck>(
+                name,
+                failureStatus,
+                tags);
+        }
+    }
+
+    internal class LivenessHealthCheck : IHealthCheck
+    {
+        private readonly ILogger<LivenessHealthCheck> _logger;
+        public LivenessHealthCheck(ILogger<LivenessHealthCheck> logger)
+        {
+            _logger = logger;
+        }
+        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _logger.LogInformation("LivenessHealthCheck executed.");
+            return Task.FromResult(HealthCheckResult.Healthy());
+        }
+    }
+
+    internal class ReadinessHealthCheck : IHealthCheck
+    {
+        private readonly ILogger<ReadinessHealthCheck> _logger;
+        public ReadinessHealthCheck(ILogger<ReadinessHealthCheck> logger)
+        {
+            _logger = logger;
+        }
+        public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _logger.LogInformation("ReadinessHealthCheck executed.");
+            return Task.FromResult(HealthCheckResult.Healthy());
+        }
     }
 }

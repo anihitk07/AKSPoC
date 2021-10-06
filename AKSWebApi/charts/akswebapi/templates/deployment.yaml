@@ -47,7 +47,7 @@ spec:
             value: {{ .Values.environment.name }}
         readinessProbe:
           httpGet:
-            path: /aks-api/hc
+            path: /aks-api/ready
             port: 8080
             scheme: HTTP	
           initialDelaySeconds: 5
@@ -57,7 +57,7 @@ spec:
           successThreshold: 1
         livenessProbe:
           httpGet:
-            path: /api-one/self
+            path: /aks-api/healthz
             port: 8080
             scheme: HTTP	
           initialDelaySeconds: 5
