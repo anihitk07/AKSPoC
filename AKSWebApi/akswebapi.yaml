@@ -1,0 +1,36 @@
+pool:
+  vmImage: 'ubuntu-18.04'
+
+variables:
+  projectName: akswebapi
+  registryServerName: '$(registryName).azurecr.io'
+  imageName: '$(projectName)'
+  # define 3 more variables: registryName, registryLogin and registryPassword in the build pipeline in UI
+
+steps:
+- bash: docker build -f $(system.defaultWorkingDirectory)/AKSWebApi/Dockerfile -t $(registryServerName)/$(imageName):$(build.buildId) $(system.defaultWorkingDirectory)
+  displayName: 'docker build'
+  continueOnError: false
+
+- bash: |
+    docker login $(registryServerName) -u $(registryLogin) -p $(registryPassword)
+    docker push $(registryServerName)/$(imageName):$(build.buildId)
+  displayName: 'docker push'  
+
+- task: CmdLine@2
+  displayName: 'Scan'
+  inputs:
+    script: |
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy --exit-code 0 --severity MEDIUM,HIGH --ignore-unfixed $(registryServerName)/$(imageName):$(build.buildId)         
+        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $HOME/Library/Caches:/root/.cache/ aquasec/trivy --exit-code 1 --severity CRITICAL --ignore-unfixed $(registryServerName)/$(imageName):$(build.buildId)
+
+- task: HelmInstaller@0
+  displayName: 'Install Helm'
+  inputs:
+    helmVersion: 3.4.2
+
+- bash: helm package --version $(build.buildId) --destination $(build.artifactStagingDirectory) $(system.defaultWorkingDirectory)/AKSWebApi/charts/$(projectName)
+  displayName: 'helm package'
+
+- bash: az acr helm push -n $(registryName) -u $(registryLogin) -p $(registryPassword) $(build.artifactStagingDirectory)/$(projectName)-$(build.buildId).tgz
+  displayName: 'az acr helm push'
