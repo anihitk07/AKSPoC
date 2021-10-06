@@ -1,0 +1,26 @@
+replicaCount: 1
+image:
+  useImagePullSecrets: false
+  pullPolicy: IfNotPresent
+container:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 200m
+    memory: 512Mi
+hpa:
+  minReplicas: 1
+  maxReplicas: 30
+  metrics:
+    cpu:
+      targetAverageUtilization: 60
+service:
+  internalPort: 8080
+  externalPort: 8080
+ingress:
+  basedomain: tcs-services-dev.anisgroove.co.uk
+environment:
+  name: Dev
+keyvault:
+  name: tcsdemoapiskv

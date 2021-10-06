@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Web Api container deployed in AKS cluster. 
+name: akswebapi
+version: v0.1.0
