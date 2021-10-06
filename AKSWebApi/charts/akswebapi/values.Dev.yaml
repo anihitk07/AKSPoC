@@ -19,8 +19,8 @@ service:
   internalPort: 8080
   externalPort: 8080
 ingress:
-  basedomain: tcs-services-dev.anisgroove.co.uk
+  basedomain: aks-services-dev.anisgroove.co.uk
 environment:
   name: Dev
 keyvault:
-  name: tcsdemoapiskv
+  name: aksdemoapiskv
