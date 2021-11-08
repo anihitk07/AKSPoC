@@ -25,8 +25,7 @@ namespace AKSWebApp.Pages
 
             try
             {
-                var apiBaseUrl = "http://10.30.128.52";
-                var valuesUrl = System.IO.Path.Combine(apiBaseUrl, "/aks-api/v1/getexception");
+                var valuesUrl = "http://10.30.128.52/aks-api/v1/getexception";
                 var client = new HttpClient();
                 var result = await client.GetAsync(valuesUrl);
                 dynamic values = JsonConvert.DeserializeObject(await result.Content.ReadAsStringAsync());

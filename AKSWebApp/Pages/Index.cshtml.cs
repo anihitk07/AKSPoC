@@ -22,8 +22,7 @@ namespace AKSWebApp.Pages
         public async void OnGet()
         {
             _logger.LogInformation("Inside Index View - Init");
-            var apiBaseUrl = "http://10.30.128.52";
-            var valuesUrl = System.IO.Path.Combine(apiBaseUrl, "/aks-api/v1/get");
+            var valuesUrl = "http://10.30.128.52/aks-api/v1/get";
             var client = new HttpClient();
             var result = await client.GetAsync(valuesUrl);
             dynamic values = JsonConvert.DeserializeObject(await result.Content.ReadAsStringAsync());
