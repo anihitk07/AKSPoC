@@ -73,4 +73,4 @@ spec:
           runAsUser: 10000
           runAsGroup: 30000
       nodeSelector:
-        poolname: akswebapi
+        poolname: tcsdemoapione
