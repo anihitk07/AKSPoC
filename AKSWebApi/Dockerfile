@@ -33,6 +33,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.12/community/" >> /etc/apk/rep
     echo "http://dl-cdn.alpinelinux.org/alpine/v3.12/main/" >> /etc/apk/repositories;
 
 RUN apk update --no-cache
+RUN apk add --no-cache icu-libs
 
 ENV APP_USER=app
 ENV APP_DIR="/$APP_USER"
