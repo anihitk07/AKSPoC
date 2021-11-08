@@ -66,14 +66,15 @@ namespace AKSWebApi.Controllers
                 int num2 = 0;
                 result = num1 / num2;
             }
-            catch (DivideByZeroException e)
+            catch (DivideByZeroException ex)
             {
-                _logger.LogError("Exception caught: {0}", e);
+                //_logger.LogError("Exception caught: {0}", ex);
+                throw ex;
             }
-            finally
-            {
-                _logger.LogError("Result: {0}", result);
-            }
+            //finally
+            //{
+            //    _logger.LogError("Result: {0}", result);
+            //}
             return result;
         }
     }

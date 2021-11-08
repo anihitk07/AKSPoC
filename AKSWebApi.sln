@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKSWebApi", "AKSWebApi\AKSWebApi.csproj", "{5C23DEC6-C0CD-4A85-A6B2-7E8A2714E8BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AKSWebApi", "AKSWebApi\AKSWebApi.csproj", "{5C23DEC6-C0CD-4A85-A6B2-7E8A2714E8BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKSWebApi.Core", "AKSWebApi.Core\AKSWebApi.Core.csproj", "{3EB90541-2571-4B7A-8E29-F5272D1F2A88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AKSWebApi.Core", "AKSWebApi.Core\AKSWebApi.Core.csproj", "{3EB90541-2571-4B7A-8E29-F5272D1F2A88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKSWebApp", "AKSWebApp\AKSWebApp.csproj", "{8972A694-F9BA-4912-9398-A424D6D38ADA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{3EB90541-2571-4B7A-8E29-F5272D1F2A88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EB90541-2571-4B7A-8E29-F5272D1F2A88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EB90541-2571-4B7A-8E29-F5272D1F2A88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8972A694-F9BA-4912-9398-A424D6D38ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8972A694-F9BA-4912-9398-A424D6D38ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8972A694-F9BA-4912-9398-A424D6D38ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8972A694-F9BA-4912-9398-A424D6D38ADA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
