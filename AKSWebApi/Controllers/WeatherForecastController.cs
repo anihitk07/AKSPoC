@@ -58,23 +58,20 @@ namespace AKSWebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("WeatherException")]
-        public int GetException()
+        public int GetException(int num1, int num2)
         {
             try
             {
-                int num1 = 25;
-                int num2 = 0;
                 result = num1 / num2;
             }
             catch (DivideByZeroException ex)
             {
-                //_logger.LogError("Exception caught: {0}", ex);
-                throw ex;
+                _logger.LogError("Exception caught: {0}", ex);
             }
-            //finally
-            //{
-            //    _logger.LogError("Result: {0}", result);
-            //}
+            finally
+            {
+                _logger.LogError("Result: {0}", result);
+            }
             return result;
         }
     }
