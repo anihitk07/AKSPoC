@@ -303,7 +303,7 @@ namespace AKSWebApi
         }
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger.LogInformation("LivenessHealthCheck executed.");
+            //_logger.LogInformation("LivenessHealthCheck executed.");
             return Task.FromResult(HealthCheckResult.Healthy());
         }
     }
@@ -317,7 +317,7 @@ namespace AKSWebApi
         }
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger.LogInformation("ReadinessHealthCheck executed.");
+            //_logger.LogInformation("ReadinessHealthCheck executed.");
             return Task.FromResult(HealthCheckResult.Healthy());
         }
     }
