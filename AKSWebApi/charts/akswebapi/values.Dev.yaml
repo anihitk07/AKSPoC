@@ -17,7 +17,7 @@ hpa:
       targetAverageUtilization: 60
 service:
   internalPort: 8080
-  externalPort: 8080
+  externalPort: 80
 ingress:
   basedomain: aks-services-dev.anisgroove.co.uk
 environment:
