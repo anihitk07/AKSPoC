@@ -1,4 +1,6 @@
 using AKSWebApi.Attributes;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +47,7 @@ namespace AKSWebApi
                 .AddLivenessHealthCheck("Liveness", HealthStatus.Unhealthy, new List<string>() { "Liveness" })
                 .AddReadinessHealthCheck("Readiness", HealthStatus.Unhealthy, new List<string> { "Readiness" });
             ConfigureSwagger(services);
+            RegisterAppInsights(services);
             services.AddApiVersioning(o =>
             {
                 o.ReportApiVersions = true;
@@ -67,6 +70,24 @@ namespace AKSWebApi
 
             services.AddHostedService<ApplicationLifetimeService>();
             services.Configure<HostOptions>(opts => opts.ShutdownTimeout = TimeSpan.FromSeconds(45));
+        }
+
+        private void RegisterAppInsights(IServiceCollection services)
+        {
+            ApplicationInsightsServiceOptions options = new ApplicationInsightsServiceOptions
+            {
+                EnableDebugLogger = false,
+                InstrumentationKey = "200988dd-4f99-4079-94d3-435f5b34dfa6"
+            };
+            services.AddApplicationInsightsTelemetry(options);
+
+            services.AddApplicationInsightsKubernetesEnricher();
+
+            var dependencyCounterService = services.FirstOrDefault<ServiceDescriptor>(t => t.ImplementationType == typeof(DependencyTrackingTelemetryModule));
+            if (dependencyCounterService != null)
+            {
+                services.Remove(dependencyCounterService);
+            }
         }
 
         private void ConfigureSwagger(IServiceCollection services)
