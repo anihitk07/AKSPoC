@@ -16,7 +16,7 @@ hpa:
     cpu:
       targetAverageUtilization: 60
 service:
-  internalPort: 8080
+  internalPort: 80
   externalPort: 80
 ingress:
   basedomain: aks-services-dev.anisgroove.co.uk
